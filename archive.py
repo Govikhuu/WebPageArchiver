@@ -19,10 +19,22 @@ def remove_directory_tree(path):
 
 
 def extract_local_asset_urls(html):
-    asset_urls = re.findall(r'src=(("(.*?)")|(\'(.*?)\'))', html)
+    asset_urls = []
+
+    srcs = re.findall(r'src=(("(.*?)")|(\'(.*?)\'))', html)
+    for group in srcs:
+        if group[2] != '':
+            asset_urls.append(group[2])
+        elif group[4] != '':
+            asset_urls.append(group[4])
+
     srcsets = re.findall(r'srcset=(("(.*?)")|(\'(.*?)\'))', html)
-    for srcset in srcsets:
-        asset_urls.append(srcset)
+    for group in srcsets:
+        if group[2] != '':
+            asset_urls.append(group[2])
+        elif group[4] != '':
+            asset_urls.append(group[4])
+
     tag_links = re.findall(r'<link(.*?)href=(("(.*?)")|(\'(.*?)\'))', html)
     for group in tag_links:
         if group[3] != '':
